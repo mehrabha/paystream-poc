@@ -28,6 +28,16 @@
 		<java.version>17</java.version>
 	</properties>
 
+	<!-- Adding confluent repo -->
+	<repositories>
+		<repository>
+			<id>confluent</id>
+			<name>Confluent Maven Repository</name>
+			<url>https://packages.confluent.io/maven/</url>
+		</repository>
+	</repositories>
+
+
 	<build>
 		<pluginManagement>
 			<plugins>

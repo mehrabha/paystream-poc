@@ -1,0 +1,10 @@
+{
+  "type": "record",
+  "name": "Payment",
+  "namespace": "com.mehrab.paystream.avro",
+  "fields": [
+    {"name":"userId",   "type":"string"},
+    {"name":"amount",   "type":"double"},
+    {"name":"currency", "type":"string"}
+  ]
+}
