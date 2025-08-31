@@ -14,5 +14,10 @@ spring:
     properties:
       schema.registry.url: ${SCHEMA_REGISTRY_URL:http://localhost:8085}
       auto.register.schemas: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-url: https://YOUR-ADFS-DOMAIN/adfs
 
 management.endpoints.web.exposure.include: health,info,metrics

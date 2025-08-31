@@ -3,8 +3,9 @@
   "name": "Payment",
   "namespace": "com.mehrab.paystream.avro",
   "fields": [
+    {"name":"transactionId",   "type":"string"},
     {"name":"userId",   "type":"string"},
     {"name":"amount",   "type":"double"},
-    {"name":"currency", "type":"string"}
+    {"name":"currency", "type":"string", "default":"USD"}
   ]
 }

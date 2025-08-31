@@ -1,0 +1,30 @@
+server:
+  port: 8082
+
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: worker
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        specific.avro.reader: true
+    properties:
+      schema.registry.url: ${SCHEMA_REGISTRY_URL:http://localhost:8085}
+    
+  datasource:
+    url: jdbc:oracle:thin:@//localhost:1521/XEPDB1
+    username: localdb
+    password: changeit
+    driver-class-name: oracle.jdbc.OracleDriver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate.jdbc.time_zone: UTC
+
+logging:
+  level:
+    org.apache.kafka: WARN
+    org.springframework.kafka: INFO
