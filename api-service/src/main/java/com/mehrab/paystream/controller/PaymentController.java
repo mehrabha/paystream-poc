@@ -1,5 +1,7 @@
 package com.mehrab.paystream.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
@@ -12,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mehrab.paystream.avro.Payment;
+import com.mehrab.paystream.model.PaymentEntity;
 import com.mehrab.paystream.model.PaymentRequest;
 import com.mehrab.paystream.model.PaymentResponse;
+import com.mehrab.paystream.repository.PaymentRepository;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +29,9 @@ public class PaymentController {
     
     @Autowired
     private KafkaTemplate<String, Payment> kafka;
+
+    @Autowired
+    private PaymentRepository paymentRepository;
 
     @Value("{app.kafka.topic}")
     private String kafkaTopic;
@@ -50,6 +57,18 @@ public class PaymentController {
         } catch(Exception e) {
             PaymentResponse response = new PaymentResponse(e.getMessage(), "EXCEPTION");
             return ResponseEntity.status(500).body(response);
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<List<PaymentEntity>> getTransactions() {
+
+        try {
+            List<PaymentEntity> transactions = paymentRepository.findAll();
+            return ResponseEntity.status(200).body(transactions);
+        } catch (Exception e) {
+            log.info("Exception occured while trying to fetch transactions from database. Error={}", e.getMessage());
+            return ResponseEntity.status(500).body(null);
         }
     }
 
