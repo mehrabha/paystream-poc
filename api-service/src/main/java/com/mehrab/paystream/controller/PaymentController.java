@@ -33,7 +33,7 @@ public class PaymentController {
     @Autowired
     private PaymentRepository paymentRepository;
 
-    @Value("{app.kafka.topic}")
+    @Value("${app.kafka.topic}")
     private String kafkaTopic;
 
     @PostMapping("/submit")

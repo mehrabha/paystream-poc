@@ -1,6 +1,7 @@
 package com.mehrab.paystream.model;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,8 +15,8 @@ public class PaymentRequest {
     @NotBlank
     private String userName;
 
-    @NotBlank
-    private double amount;
+    @NotNull
+    private Double amount;
 
     private String transactionType;
     
