@@ -7,17 +7,27 @@ app:
 
 spring:
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9093}
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
     properties:
       schema.registry.url: ${SCHEMA_REGISTRY_URL:http://localhost:8085}
       auto.register.schemas: true
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-url: https://YOUR-ADFS-DOMAIN/adfs
+  datasource:
+    url: jdbc:oracle:thin:@//localhost:1521/XEPDB1
+    username: localdb
+    password: passw0rd
+    driver-class-name: oracle.jdbc.OracleDriver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate.jdbc.time_zone: UTC
+  # security:
+  #   oauth2:
+  #     resourceserver:
+  #       jwt:
+  #         issuer-url: https://YOUR-ADFS-DOMAIN/adfs
 
 management.endpoints.web.exposure.include: health,info,metrics

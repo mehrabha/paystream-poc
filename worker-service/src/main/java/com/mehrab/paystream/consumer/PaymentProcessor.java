@@ -12,10 +12,13 @@ import com.mehrab.paystream.avro.Payment;
 import com.mehrab.paystream.model.PaymentEntity;
 import com.mehrab.paystream.repository.PaymentRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 
 /* Consumer Service for persisting records into database */
 
 @Component
+@Slf4j
 public class PaymentProcessor {
 
     @Autowired
@@ -23,10 +26,12 @@ public class PaymentProcessor {
 
     @KafkaListener(topics = "payments")
     public void onEvent(ConsumerRecord<String, Payment> message) {
+        log.info("Recieved Kafka event with Id={}", message.key());
         Payment paymentData = message.value();
 
-        PaymentEntity entry = new PaymentEntity();
+        log.info("Processing transaction, messageId={}, transactionId={}", message.key(), paymentData.getTransactionId());
 
+        PaymentEntity entry = new PaymentEntity();
         entry.setId(paymentData.getTransactionId());
         entry.setUserId(paymentData.getUserId());
         entry.setAmount(paymentData.getAmount());
@@ -35,5 +40,6 @@ public class PaymentProcessor {
         entry.setStatus("POSTED");
 
         paymentRepository.save(entry);
+
     }
 }

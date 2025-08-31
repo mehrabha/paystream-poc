@@ -3,7 +3,7 @@ server:
 
 spring:
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    bootstrap-servers: localhost:9093
     consumer:
       group-id: worker
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -12,7 +12,6 @@ spring:
         specific.avro.reader: true
     properties:
       schema.registry.url: ${SCHEMA_REGISTRY_URL:http://localhost:8085}
-    
   datasource:
     url: jdbc:oracle:thin:@//localhost:1521/XEPDB1
     username: localdb
