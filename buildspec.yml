@@ -1,0 +1,25 @@
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - echo Logging into ECR...
+      - aws --version
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - TAG=${IMAGE_TAG:-latest}
+  build:
+    commands:
+      - echo Building API image...
+      - docker build -t paystream-api ./api-service
+      - docker tag paystream-api:latest ${API_REPO}:${TAG}
+      - echo Building Worker image...
+      - docker build -t paystream-worker ./worker-service
+      - docker tag paystream-worker:latest ${WORKER_REPO}:${TAG}
+  post_build:
+    commands:
+      - echo Pushing images...
+      - docker push ${API_REPO}:${TAG}
+      - docker push ${WORKER_REPO}:${TAG}
+      - printf '[{"name":"api","imageUri":"%s"},{"name":"worker","imageUri":"%s"}]\n' "${API_REPO}:${TAG}" "${WORKER_REPO}:${TAG}" > imagedefinitions.json
+artifacts:
+  files:
+    - imagedefinitions.json
