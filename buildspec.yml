@@ -4,15 +4,24 @@ phases:
     commands:
       - echo Logging into ECR...
       - aws --version
+      - mvn -v
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       - TAG=${IMAGE_TAG:-latest}
   build:
     commands:
+      - echo Maven multi-module build...
+      - mvn -q -DskipTests clean package  # builds parent + modules
+
+      - echo "List built artifacts:"
+      - ls -l api-service/target || true
+      - ls -l worker-service/target || true
+      
       - echo Building API image...
-      - docker build -t paystream-api ./api-service
+      - docker build -t paystream-api -f api-service/Dockerfile .
       - docker tag paystream-api:latest ${API_REPO}:${TAG}
+
       - echo Building Worker image...
-      - docker build -t paystream-worker ./worker-service
+      - docker build -t paystream-worker -f worker-service/Dockerfile .
       - docker tag paystream-worker:latest ${WORKER_REPO}:${TAG}
   post_build:
     commands:
