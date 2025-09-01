@@ -37,6 +37,7 @@ resource "aws_codebuild_project" "paystream_build" {
     location        = "https://github.com/mehrabha/paystream-poc"
     git_clone_depth = 1
     buildspec       = "buildspec.yml"
+    branch          = "develop"
   }
 
   logs_config {
